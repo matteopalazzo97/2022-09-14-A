@@ -6,6 +6,8 @@ package it.polito.tdp.itunes;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import it.polito.tdp.itunes.model.Album;
 import it.polito.tdp.itunes.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,7 +36,7 @@ public class FXMLController {
     private Button btnSet; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbA1"
-    private ComboBox<?> cmbA1; // Value injected by FXMLLoader
+    private ComboBox<Album> cmbA1; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtDurata"
     private TextField txtDurata; // Value injected by FXMLLoader
@@ -48,10 +50,51 @@ public class FXMLController {
     @FXML
     void doComponente(ActionEvent event) {
     	
+    	Album album;
+    	
+    	if(this.cmbA1.getValue() == null) {
+    		this.txtResult.appendText("\nSelezionare un valore dal menù a tendina");
+    		return;
+    	}
+    	
+    	album = this.cmbA1.getValue();
+    	
+    	this.txtResult.appendText("\nDimensione della componente connessa a cui appartiene " + 
+    								album.toString() + ": " + this.model.dimConnessa(album)); 
+    	
+    	this.txtResult.appendText("\nDurata componente connessa: " + this.model.minConnessa(album) +
+    								" min.");		
+    	
     }
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	
+    	this.txtResult.clear();
+    	
+    	int durata;
+    	
+    	if(this.txtDurata.getText() == null) {
+    		this.txtResult.setText("Inserire un valore di durata.");
+    		return;
+    	}
+    	try {
+    		durata = Integer.parseInt(this.txtDurata.getText());
+    	} catch(NumberFormatException e) {
+    		e.printStackTrace();
+    		this.txtResult.setText("Inserire un valore numerico per la durata.");
+    		return;
+    	}
+    	
+    	this.model.creaGrafo(durata);
+    	
+    	this.txtResult.appendText("Grafo creato.");
+    	this.txtResult.appendText("\nVertici: " + this.model.getNumVertici());
+    	this.txtResult.appendText("\nArchi: " + this.model.getNumArchi());
+
+    	
+    	this.cmbA1.getItems().addAll(this.model.getTendina(durata));
+    	
     	
     }
 
