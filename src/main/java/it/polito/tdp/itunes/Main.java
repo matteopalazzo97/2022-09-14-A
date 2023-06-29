@@ -5,3 +5,5 @@ public class Main {
         EntryPoint.main(args);
     }
 }
+//non orientato e non pesato
+//dimensione componente connessa cui appartiene un vertice + cosa strana
